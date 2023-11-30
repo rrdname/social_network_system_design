@@ -1,2 +1,2 @@
-# social_network_system_design
-Social network system design
+## Учебный проект
+Дизайн социальной сети для курса по System Design
