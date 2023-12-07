@@ -1,7 +1,7 @@
 // Use DBML to define your database structure
 // Docs: https://dbml.dbdiagram.io/docs
 
-Table users {
+able users {
   id integer [primary key]
   name varchar
   surname varchar
@@ -58,9 +58,14 @@ Table media {
 
 Table chats {
    id integer
-   user_id integer
    created_at integer
    type enum(direct, group)
+   name varchar
+}
+
+Table chat_participants {
+   user_id integer
+   chat_id integer
 }
 
 
@@ -89,7 +94,8 @@ Ref: posts.posts_hashtags_post_id < posts_hastags.post_id
 Ref: posts_hastags.hashtag_id > hastags.id
 Ref: posts.id < posts_comments.post_id
 Ref: chats.id < messages.chat_id
-Ref: users.id < chats.user_id
+Ref: users.id < chat_participants.user_id
+Ref: chat_participants.chat_id - chats.id
 Ref: messages.media_id - media.id
 Ref: users.id - relationsips.user_id_from
 Ref: users.id - relationsips.user_id_to
