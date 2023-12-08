@@ -1,7 +1,14 @@
 // Use DBML to define your database structure
 // Docs: https://dbml.dbdiagram.io/docs
 
-able users {
+// shard_key: user_id / key_based 
+//            Плюсы: пользователи рапределяются равномерно по шардам.
+//            Минусы: проблема с чтением списка и join'ами
+// replica: master -> slave. 
+// consistency: evential
+// read mode: монотонное чтение. Каждый раз виден один и тот же профиль. Актуальность обновления не принципиальна.
+//            Владелец профиля ходит на мастер для решения проблемы read after write
+Table users {
   id integer [primary key]
   name varchar
   surname varchar
@@ -13,6 +20,13 @@ able users {
 }
 
 
+// shard_key: user_id / key_based 
+//            Плюсы: Посты равномерно рапределяются по шардам. 
+//                   Для запроса списка постов пользователя ходим только на 1 шард.
+//            Минусы: Чтение с разных реплик при отображении ленты новостей.
+// replica: master -> slave. 
+// consistency: evential
+// read mode: монотонное чтение по user_id. Каждый раз виден один и тот же список постов.
 Table posts {
   id integer [primary key]
   user_id integer
@@ -24,12 +38,28 @@ Table posts {
   likes integer
 }
 
+// shard_key: hastag_id / key_based
+//            Плюсы: Быстро определяется список постов по одному хештегу. 
+//            Минусы: Если надо смотреть какие хештеги содержит пост, то надо сканить. 
+//                   TODO: Лучше перенести список хештегов в таблицу posts, тогда проблема устранится.
+// replica: master -> slave. 
+// consistency: evential
+// read mode: монотонное чтение по user владельца запроса.
 Table posts_hastags {
   id integer [primary key]
   post_id integer
   hashtag_id integer
 }
 
+
+// shard_key: user_id / key_based
+//            Плюсы: Т.к. пользователей много, у нас хорошее распределение постов по шардам. 
+//                     Комментарии постов одного пользователя находятся на одном шарде, что упрощает чтение ленты постов.
+//            Минусы:
+// replica: master -> slave. 
+// consistency: evential
+// read mode: монотонное чтение по user_id. Если пользователь владелец запроса недавно редактировал посты user_id,
+//            то перенаправляем его на master.
 Table posts_comments {
   id integer [primary key]
   post_id integer
