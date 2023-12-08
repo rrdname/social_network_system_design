@@ -1,0 +1,436 @@
+openapi: 3.0.1
+info:
+  title: Проект API для социальной сети
+  description: 'API разрабатывается в рамках учебного проекта для курса `System Design`'
+  version: 0.0.1
+paths:
+  /api/v1/users/me/friends/{user_id}:
+    post:
+      tags:
+        - users
+      summary: Добавить друга
+      operationId: add_friend_api_v1_users_me_friends__user_id__post
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    delete:
+      tags:
+        - users
+      summary: Удалить пользователя из друзей
+      operationId: delete_friend_api_v1_users_me_friends__user_id__delete
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/users/me/friends:
+    get:
+      tags:
+        - users
+      summary: Отобразить список друзей.
+      operationId: get_friends_api_v1_users_me_friends_get
+      parameters:
+        - description: Количество возвращаемых элементов. Максимальное значение - 500
+          required: false
+          schema:
+            type: integer
+            title: Limit
+            description: Количество возвращаемых элементов. Максимальное значение - 500
+            default: 100
+          name: limit
+          in: query
+        - description: >-
+            Сколько элементов пропустить в выдаче. Используется для
+            постраничного получения списка пользователей в комбинации с
+            параметром limit.
+          required: false
+          schema:
+            type: integer
+            title: Offset
+            description: >-
+              Сколько элементов пропустить в выдаче. Используется для
+              постраничного получения списка пользователей в комбинации с
+              параметром limit.
+            default: 0
+          name: offset
+          in: query
+        - description: Параметр для фильтрации по признаку "online"
+          required: false
+          schema:
+            type: boolean
+            title: Online
+            description: Параметр для фильтрации по признаку "online"
+          name: online
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/users/{user_id}/profile:
+    get:
+      tags:
+        - users
+      summary: Получить профиль пользователя
+      operationId: get_user_profile_api_v1_users__user_id__profile_get
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/users/{user_id}/friends:
+    get:
+      tags:
+        - users
+      summary: Получить список друзей пользователя
+      operationId: get_user_friends_api_v1_users__user_id__friends_get
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+        - description: >-
+            Сколько элементов пропустить в выдаче. Используется для
+            постраничного получения списка пользователей в комбинации с
+            параметром limit.
+          required: false
+          schema:
+            type: integer
+            title: Offset
+            description: >-
+              Сколько элементов пропустить в выдаче. Используется для
+              постраничного получения списка пользователей в комбинации с
+              параметром limit.
+            default: 0
+          name: offset
+          in: query
+        - description: Параметр для фильтрации по признаку "online"
+          required: false
+          schema:
+            type: boolean
+            title: Online
+            description: Параметр для фильтрации по признаку "online"
+          name: online
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/users/{user_id}/posts:
+    get:
+      tags:
+        - users
+      summary: Получение списка постов
+      operationId: get_user_posts_api_v1_users__user_id__posts_get
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+        - description: Количество возвращаемых элементов. Максимальное значение - 500
+          required: false
+          schema:
+            type: integer
+            title: Limit
+            description: Количество возвращаемых элементов. Максимальное значение - 500
+            default: 100
+          name: limit
+          in: query
+        - description: >-
+            Сколько элементов пропустить в выдаче. Используется для
+            постраничного получения списка пользователей в комбинации с
+            параметром limit.
+          required: false
+          schema:
+            type: integer
+            title: Offset
+            description: >-
+              Сколько элементов пропустить в выдаче. Используется для
+              постраничного получения списка пользователей в комбинации с
+              параметром limit.
+            default: 0
+          name: offset
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    post:
+      tags:
+        - users
+      summary: Публикация поста
+      description: >-
+        Посты можно публиковать на своей странице, так и на странице друга, если
+        пользователь это разрешает.  К постам можно прикреплять изображения и
+        видеофайлы. Максимальное количество файлов - 5.
+      operationId: get_user_posts_api_v1_users__user_id__posts_post
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+        - description: Текст публикации
+          required: true
+          schema:
+            type: string
+            title: Text
+            description: Текст публикации
+          name: text
+          in: query
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: >-
+                #/components/schemas/Body_get_user_posts_api_v1_users__user_id__posts_post
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/chats:
+    get:
+      tags:
+        - chats
+      summary: Получение списка чатов
+      operationId: get_chats_api_v1_chats_get
+      parameters:
+        - description: Фильтр по имени пользователя
+          required: false
+          schema:
+            type: string
+            maxLength: 100
+            title: Filter By Username
+            description: Фильтр по имени пользователя
+          name: filter_by_username
+          in: query
+        - description: Количество возвращаемых элементов. Максимальное значение - 500
+          required: false
+          schema:
+            type: integer
+            title: Limit
+            description: Количество возвращаемых элементов. Максимальное значение - 500
+            default: 100
+          name: limit
+          in: query
+        - description: >-
+            Сколько элементов пропустить в выдаче. Используется для
+            постраничного получения списка пользователей в комбинации с
+            параметром limit.
+          required: false
+          schema:
+            type: integer
+            title: Offset
+            description: >-
+              Сколько элементов пропустить в выдаче. Используется для
+              постраничного получения списка пользователей в комбинации с
+              параметром limit.
+            default: 0
+          name: offset
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/chats/{user_id}/messages:
+    get:
+      tags:
+        - chats
+      summary: Получение списка сообщений
+      operationId: get_messages_api_v1_chats__user_id__messages_get
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+        - description: Фильтр по имени пользователя
+          required: false
+          schema:
+            type: string
+            maxLength: 100
+            title: Filter By Username
+            description: Фильтр по имени пользователя
+          name: filter_by_username
+          in: query
+        - description: Количество возвращаемых элементов. Максимальное значение - 500
+          required: false
+          schema:
+            type: integer
+            title: Limit
+            description: Количество возвращаемых элементов. Максимальное значение - 500
+            default: 100
+          name: limit
+          in: query
+        - description: >-
+            Сколько элементов пропустить в выдаче. Используется для
+            постраничного получения списка пользователей в комбинации с
+            параметром limit.
+          required: false
+          schema:
+            type: integer
+            title: Offset
+            description: >-
+              Сколько элементов пропустить в выдаче. Используется для
+              постраничного получения списка пользователей в комбинации с
+              параметром limit.
+            default: 0
+          name: offset
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    post:
+      tags:
+        - chats
+      summary: Отправить сообщение пользователю
+      operationId: post_message_api_v1_chats__user_id__messages_post
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+        - description: Текст публикации
+          required: true
+          schema:
+            type: string
+            title: Text
+            description: Текст публикации
+          name: text
+          in: query
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: >-
+                #/components/schemas/Body_post_message_api_v1_chats__user_id__messages_post
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/chats/{user_id}/messages/{message_id}:
+    delete:
+      tags:
+        - chats
+      summary: Отправить сообщение пользователю
+      operationId: post_message_api_v1_chats__user_id__messages__message_id__delete
+      parameters:
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: User Id
+            description: Идентификатор пользователя
+          name: user_id
+          in: path
+        - description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+            title: Message Id
+            description: Идентификатор пользователя
+          name: message_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    Body_get_user_posts_api_v1_users__user_id__posts_post:
+      properties:
+        files:
+          items:
+            type: string
+            format: binary
+          type: array
+          title: Files
+      type: object
+      required:
+        - files
+      title: Body_get_user_posts_api_v1_users__user_id__posts_post
+    Body_post_message_api_v1_chats__user_id__messages_post:
+      properties:
+        files:
+          items:
+            type: string
+            format: binary
+          type: array
+          title: Files
+      type: object
+      required:
+        - files
+      title: Body_post_message_api_v1_chats__user_id__messages_post
+tags:
+  - name: users
+    description: Операции для управления пользователями
+  - name: chats
+    description: Операции для управления чатами пользователей
